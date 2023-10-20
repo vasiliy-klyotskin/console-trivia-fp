@@ -5,5 +5,7 @@ ThisBuild / scalaVersion := "3.3.1"
 lazy val root = (project in file("."))
   .settings(
     name := "trivia-fp",
-    idePackagePrefix := Some("org.kyotskin.trivia")
+    idePackagePrefix := Some("org.kyotskin.trivia"),
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.15" % "test",
+    libraryDependencies += "org.typelevel" %% "cats-effect" % "3.5.2",
   )
