@@ -11,6 +11,6 @@ enum Difficulty {
   case Hard
 }
 
-case class Answer(isCorrect: Boolean, time: Double)
+case class Answer(isCorrect: Boolean, time: Double, wordsCountInQuestion: Int)
 
-def score(answers: List[Answer], difficulty: Difficulty): Int = 0
+def score(answers: List[Answer]): Int = 0
