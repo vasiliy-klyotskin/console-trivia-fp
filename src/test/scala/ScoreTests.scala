@@ -36,6 +36,11 @@ class ScoreTests extends AnyFunSuite {
     assert(score(answers) == 1)
   }
 
+  test("Score for one answer which has been solved in normal time") {
+    val answers = List(Answer(isCorrect = true, time = 8, wordsCountInQuestion = 16))
+    assert(score(answers) == 2)
+  }
+
   private def anyTime(): Double = 0.0
   private def anyWordCount(): Int = 0
 }

@@ -19,6 +19,8 @@ def score(answers: List[Answer]): Int = {
       scoreForCorrectAndFast(answer)
     } else if (isCorrectAndSlow(answer)) {
       1
+    } else if (answer.isCorrect) {
+      2
     } else {
       0
     }
