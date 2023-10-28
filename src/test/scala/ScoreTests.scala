@@ -11,19 +11,29 @@ class ScoreTests extends AnyFunSuite {
     assert(score(answers) == 0)
   }
 
-  test("Score for one answer which has been solved instantaneously") {
+  test("Score for one answer which has been solved fast for 0 sec") {
     val answers = List(Answer(isCorrect = true, time = 0, wordsCountInQuestion = 16))
     assert(score(answers) == 24)
   }
 
-  test("Score for one answer which has been solved after 1 sec") {
+  test("Score for one answer which has been solved fast for 1 sec") {
     val answers = List(Answer(isCorrect = true, time = 1, wordsCountInQuestion = 16))
     assert(score(answers) == 21)
   }
 
-  test("Score for one answer which has been solved after maximum time that is considered fast") {
+  test("Score for one answer which has been solved in maximum time that is considered fast") {
     val answers = List(Answer(isCorrect = true, time = 7, wordsCountInQuestion = 16))
     assert(score(answers) == 3)
+  }
+
+  test("Score for one answer which has been solved in the least time that is considered slow") {
+    val answers = List(Answer(isCorrect = true, time = 10, wordsCountInQuestion = 16))
+    assert(score(answers) == 1)
+  }
+
+  test("Score for one answer which has been solved slow") {
+    val answers = List(Answer(isCorrect = true, time = 999, wordsCountInQuestion = 16))
+    assert(score(answers) == 1)
   }
 
   private def anyTime(): Double = 0.0
