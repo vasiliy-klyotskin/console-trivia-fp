@@ -41,6 +41,23 @@ class ScoreTests extends AnyFunSuite {
     assert(score(answers) == 2)
   }
 
+  test("Score for two correct answers in a row of 2") {
+    val answers = List(
+      Answer(isCorrect = true, time = 6, wordsCountInQuestion = 16),
+      Answer(isCorrect = true, time = 4, wordsCountInQuestion = 16)
+    )
+    assert(score(answers) == 21) // 6 + 15.6 = 21.6 => 21
+  }
+
+  test("Score for three correct answers in a row of 3") {
+    val answers = List(
+      Answer(isCorrect = true, time = 4, wordsCountInQuestion = 16),
+      Answer(isCorrect = true, time = 6, wordsCountInQuestion = 16),
+      Answer(isCorrect = true, time = 5, wordsCountInQuestion = 16)
+    )
+    assert(score(answers) == 34) // 12 + 7,8 + 14,4 = 34,2 => 34
+  }
+
   private def anyTime(): Double = 0.0
   private def anyWordCount(): Int = 0
 }

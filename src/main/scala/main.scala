@@ -14,31 +14,43 @@ enum Difficulty {
 case class Answer(isCorrect: Boolean, time: Double, wordsCountInQuestion: Int)
 
 def score(answers: List[Answer]): Int = {
-  answers.foldLeft(0)((ac, answer) =>
-    if (isCorrectAndFast(answer)) {
-      scoreForCorrectAndFast(answer)
-    } else if (isCorrectAndSlow(answer)) {
-      1
-    } else if (answer.isCorrect) {
-      2
-    } else {
-      0
-    }
-  )
+  answers.zip(streaks(answers)).map(scoreOne).sum.toInt
 }
 
+def streaks(answers: List[Answer]): List[Int] = {
+  answers
+    .inits
+    .toList
+    .reverse
+    .map(_.reverse.takeWhile(isCorrectAndFast).length)
+    .init
+}
 
-def scoreForCorrectAndFast(answer: Answer) = {
+def scoreOne(answer: Answer, streak: Int): Double = {
+  if (isCorrectAndFast(answer)) {
+    scoreForCorrectAndFast(answer, streak)
+  } else if (answer.isCorrect && isSlow(answer)) {
+    1
+  } else if (answer.isCorrect) {
+    2
+  } else {
+    0
+  }
+}
+
+def scoreForCorrectAndFast(answer: Answer, streak: Int): Double = {
   val remainingTimeUntilAnswerIsNotFast = maxTimeThatIsConsideredFast(answer) - answer.time
-  (3 * remainingTimeUntilAnswerIsNotFast + 3).toInt
+  val streakRate = 1 + streak * 0.3
+  val score = 3 * remainingTimeUntilAnswerIsNotFast + 3
+  score * streakRate
+}
+
+def maxTimeThatIsConsideredFast(answer: Answer): Double = {
+  answer.wordsCountInQuestion.toDouble / averageReadingTimeRate() + 3
 }
 
 def isCorrectAndFast(answer: Answer): Boolean = {
   answer.isCorrect && isFast(answer)
-}
-
-def isCorrectAndSlow(answer: Answer): Boolean = {
-  answer.isCorrect && isSlow(answer)
 }
 
 def isFast(answer: Answer): Boolean = {
@@ -46,15 +58,7 @@ def isFast(answer: Answer): Boolean = {
 }
 
 def isSlow(answer: Answer): Boolean = {
-  answer.time >= leastTimeThatIsConsideredSlow(answer)
-}
-
-def maxTimeThatIsConsideredFast(answer: Answer): Double = {
-  answer.wordsCountInQuestion.toDouble / averageReadingTimeRate() + 3
-}
-
-def leastTimeThatIsConsideredSlow(answer: Answer): Double = {
-  answer.wordsCountInQuestion.toDouble / averageReadingTimeRate() + 6
+  answer.time >= answer.wordsCountInQuestion.toDouble / averageReadingTimeRate() + 6
 }
 
 def averageReadingTimeRate(): Double = 4
