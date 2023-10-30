@@ -13,7 +13,7 @@ enum Difficulty {
 
 case class Answer(isCorrect: Boolean, time: Double, wordsCountInQuestion: Int)
 
-def score(answers: List[Answer]): Int = {
+def baseScore(answers: List[Answer]): Int = {
   answers.zip(streaks(answers)).map(scoreOne).sum.toInt
 }
 
@@ -46,7 +46,7 @@ def scoreForCorrectAndFast(answer: Answer, streak: Int): Double = {
 }
 
 def maxTimeThatIsConsideredFast(answer: Answer): Double = {
-  answer.wordsCountInQuestion.toDouble / averageReadingTimeRate() + 3
+  answer.wordsCountInQuestion.toDouble * averageReadingTimeRate() + 3
 }
 
 def isCorrectAndFast(answer: Answer): Boolean = {
@@ -58,7 +58,7 @@ def isFast(answer: Answer): Boolean = {
 }
 
 def isSlow(answer: Answer): Boolean = {
-  answer.time >= answer.wordsCountInQuestion.toDouble / averageReadingTimeRate() + 6
+  answer.time >= answer.wordsCountInQuestion.toDouble * averageReadingTimeRate() + 6
 }
 
-def averageReadingTimeRate(): Double = 4
+def averageReadingTimeRate(): Double = 1.0 / 4.0
