@@ -1,7 +1,9 @@
 package org.kyotskin.trivia
+import domain.baseScore
+import domain.Answer
 import org.scalatest.funsuite.AnyFunSuite
 
-class ScoreTests extends AnyFunSuite {
+class BaseScoreTests extends AnyFunSuite {
   test("Base Score equals zero on no answers") {
     assert(baseScore(List.empty) == 0)
   }
