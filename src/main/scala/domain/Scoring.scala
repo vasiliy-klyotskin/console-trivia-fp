@@ -5,6 +5,17 @@ def baseScore(answers: List[Answer]): Int = {
   answers.zip(streaks(answers)).map(scoreOne).sum.toInt
 }
 
+def penaltyRate(answers: List[Answer]): Double = {
+  if answers.isEmpty || answers.forall(_.isCorrect) then {
+    1.0
+  } else {
+    val mistakesCount = answers.count(!_.isCorrect).toDouble
+    val answersCount = answers.length.toDouble
+    val correctCount = answersCount - mistakesCount
+    (0.85 / (answersCount * answersCount)) * (correctCount * correctCount)
+  }
+}
+
 private def streaks(answers: List[Answer]): List[Int] = {
   answers
     .inits
