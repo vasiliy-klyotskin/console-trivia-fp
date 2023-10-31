@@ -58,5 +58,6 @@ class PenaltyRateTests extends AnyFunSuite {
   private def answer(isCorrect: Boolean) = Answer(isCorrect, anyTime(), anyWordCount())
 
   private def anyTime(): Double = 0.0
+  
   private def anyWordCount(): Int = 0
 }

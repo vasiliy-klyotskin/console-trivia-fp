@@ -48,7 +48,8 @@ class BaseScoreTests extends AnyFunSuite {
       Answer(isCorrect = true, time = 6, wordsCountInQuestion = 16),
       Answer(isCorrect = true, time = 4, wordsCountInQuestion = 16)
     )
-    assert(baseScore(answers) == 21) // 6 + 15.6 = 21.6 => 21
+    // 6 + 15.6 = 21.6 => 21
+    assert(baseScore(answers) == 21) 
   }
 
   test("Base Score for three correct answers in a row of 3") {
@@ -57,7 +58,8 @@ class BaseScoreTests extends AnyFunSuite {
       Answer(isCorrect = true, time = 6, wordsCountInQuestion = 16),
       Answer(isCorrect = true, time = 5, wordsCountInQuestion = 16)
     )
-    assert(baseScore(answers) == 34) // 12 + 7,8 + 14,4 = 34,2 => 34
+    // 12 + 7,8 + 14,4 = 34,2 => 34
+    assert(baseScore(answers) == 34)
   }
 
   test("Base Score for answers with incorrect instances") {
@@ -70,7 +72,8 @@ class BaseScoreTests extends AnyFunSuite {
       Answer(isCorrect = false, time = anyTime(), wordsCountInQuestion = anyWordCount()),
       Answer(isCorrect = false, time = anyTime(), wordsCountInQuestion = anyWordCount())
     )
-    assert(baseScore(answers) == 34) // 12 + 7,8 + 14,4 = 34.2 => 34
+    // 12 + 7,8 + 14,4 = 34.2 => 34
+    assert(baseScore(answers) == 34) 
   }
 
   test("Base Score for multiple different answers") {
@@ -86,9 +89,11 @@ class BaseScoreTests extends AnyFunSuite {
       Answer(isCorrect = true, time = 2, wordsCountInQuestion = 12),
       Answer(isCorrect = true, time = 6, wordsCountInQuestion = 20),
     )
-    assert(baseScore(answers) == 91) // 9 + 7.8 + 19.2 + 0 + 1 + 0 + 6 + 7.8 + 24 + 17.1 = 91.9 => 91
+    // 9 + 7.8 + 19.2 + 0 + 1 + 0 + 6 + 7.8 + 24 + 17.1 = 91.9 => 91
+    assert(baseScore(answers) == 91) 
   }
 
   private def anyTime(): Double = 0.0
+  
   private def anyWordCount(): Int = 0
 }
