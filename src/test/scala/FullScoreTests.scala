@@ -19,7 +19,7 @@ class FullScoreTests extends AnyFunSuite {
 
   private def predefinedAnswers(): List[Answer] = {
     // baseScore: 9 + 7.8 + 19.2 + 0 + 1 + 0 + 6 + 7.8 + 24 + 17.1 = 91.9 => 91
-    // fulllScore: 91 * 10 * (0.85 / 10^2) * (2 - 10)^2 = 495.04 => 495
+    // fullScore: 91 * 10 * (0.85 / 10^2) * (2 - 10)^2 = 495.04 => 495
     List(
       Answer(isCorrect = true, time = 4, wordsCountInQuestion = 12),
       Answer(isCorrect = true, time = 6, wordsCountInQuestion = 16),
