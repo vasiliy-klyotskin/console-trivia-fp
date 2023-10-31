@@ -1,6 +1,16 @@
 package org.kyotskin.trivia
 package domain
 
+def finalScore(answers: List[Answer], difficulty: Difficulty): Int = {
+  val baseScoreForAllAnswers = baseScore(answers)
+  val penaltyForIncorrectAnswers = penaltyRate(answers)
+  val difficultyRate = difficulty match {
+    case Difficulty.Easy => 10
+    case Difficulty.Medium => 20
+    case Difficulty.Hard => 30
+  }
+  (baseScoreForAllAnswers * penaltyForIncorrectAnswers * difficultyRate).toInt
+}
 def baseScore(answers: List[Answer]): Int = {
   answers.zip(streaks(answers)).map(scoreOne).sum.toInt
 }
