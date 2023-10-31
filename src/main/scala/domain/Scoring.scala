@@ -1,7 +1,7 @@
 package org.kyotskin.trivia
 package domain
 
-def finalScore(answers: List[Answer], difficulty: Difficulty): Int = {
+def fullScore(answers: List[Answer], difficulty: Difficulty): Int = {
   val baseScoreForAllAnswers = baseScore(answers)
   val penaltyForIncorrectAnswers = penaltyRate(answers)
   val difficultyRate = difficulty match {

@@ -1,20 +1,20 @@
 package org.kyotskin.trivia
-import domain.finalScore
+import domain.fullScore
 import domain.Answer
 import domain.Difficulty
 import org.scalatest.funsuite.AnyFunSuite
 
-class FinalScoreTests extends AnyFunSuite {
+class FullScoreTests extends AnyFunSuite {
   test("Final score for easy difficulty") {
-    assert(finalScore(predefinedAnswers(), Difficulty.Easy) == 495)
+    assert(fullScore(predefinedAnswers(), Difficulty.Easy) == 495)
   }
 
   test("Final score for normal difficulty") {
-    assert(finalScore(predefinedAnswers(), Difficulty.Medium) == 990)
+    assert(fullScore(predefinedAnswers(), Difficulty.Medium) == 990)
   }
 
   test("Final score for hard difficulty") {
-    assert(finalScore(predefinedAnswers(), Difficulty.Hard) == 1485)
+    assert(fullScore(predefinedAnswers(), Difficulty.Hard) == 1485)
   }
 
   private def predefinedAnswers(): List[Answer] = {
