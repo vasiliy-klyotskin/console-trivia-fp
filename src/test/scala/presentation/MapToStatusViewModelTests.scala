@@ -15,6 +15,16 @@ class MapToStatusViewModelTests extends AnyFunSuite {
     assert(mapToStatusViewModel(trivia) == expected)
   }
 
+  test("Sut maps trivia model to view model") {
+    val (trivia, score) = makeTriviaAndScore(20, List(false, true, true, false, true, true))
+    val expected = StatusViewModel(
+      progressTitle = "Progress:   6 / 20",
+      scoreTitle = s"Score:      $score",
+      progressIndicator = "o + + o + +"
+    )
+    assert(mapToStatusViewModel(trivia) == expected)
+  }
+
   private def makeTriviaAndScore(questionsCount: Int, answersIsCorrectCriteria: List[Boolean]): (Trivia, Int) = {
     val questions = (0 until questionsCount).map(_ => Question("any", List.empty, "any")).toList
     val anyTime = 2
