@@ -1,6 +1,7 @@
 package org.kyotskin.trivia
+package domain
+
 import domain.baseScore
-import domain.Answer
 import org.scalatest.funsuite.AnyFunSuite
 
 class BaseScoreTests extends AnyFunSuite {

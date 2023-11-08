@@ -1,7 +1,7 @@
 package org.kyotskin.trivia
+package domain
+
 import domain.fullScore
-import domain.Answer
-import domain.Difficulty
 import org.scalatest.funsuite.AnyFunSuite
 
 class FullScoreTests extends AnyFunSuite {

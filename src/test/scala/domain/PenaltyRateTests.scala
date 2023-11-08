@@ -1,8 +1,9 @@
 package org.kyotskin.trivia
+package domain
+
 import domain.penaltyRate
-import domain.Answer
-import org.scalatest.funsuite.AnyFunSuite
 import org.scalactic.Tolerance.convertNumericToPlusOrMinusWrapper
+import org.scalatest.funsuite.AnyFunSuite
 
 class PenaltyRateTests extends AnyFunSuite {
   test("Penalty rate for empty answers") {
