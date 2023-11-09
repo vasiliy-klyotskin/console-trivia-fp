@@ -14,6 +14,19 @@ def mapToCategoryChoiceViewModel(categories: List[Category]): CategoryChoiceStep
   CategoryChoiceStepViewModel(message, indexedList(categories.map(_.name)))
 }
 
+def mapToDifficultyChoiceStepViewModel(playerName: String, difficulties: List[Difficulty]): DifficultyChoiceStepViewModel = {
+  val message = s"Fantastic, $playerName! You've selected your categories. Now, it's time to choose the difficulty level for your trivia adventure. Please enter the number corresponding to your desired difficulty level:"
+  DifficultyChoiceStepViewModel(message, indexedList(difficulties.map(mapDifficultyName)))
+}
+
+private def mapDifficultyName(difficulty: Difficulty): String = {
+  difficulty match {
+    case Difficulty.Easy => "Easy"
+    case Difficulty.Medium => "Medium"
+    case Difficulty.Hard => "Hard"
+  }
+}
+
 def mapToStatusViewModel(trivia: Trivia): StatusViewModel = {
   val score = fullScore(trivia.answers, trivia.difficulty)
   val progressTitle = s"Progress:   ${trivia.answers.length} / ${trivia.questions.length}"
@@ -30,7 +43,5 @@ def mapToQuestionViewModel(question: Question): QuestionViewModel = {
 }
 
 private def indexedList(strings: List[String]): List[String] = {
-  strings
-    .zipWithIndex
-    .map((str, index) => s"${index+1}. $str")
+  strings.zipWithIndex.map((str, index) => s"${index+1}. $str")
 }
