@@ -4,7 +4,7 @@ package presentation
 import domain.*
 import org.scalatest.funsuite.AnyFunSuite
 
-class MapToCategoryChoiceStepViewModelTests extends AnyFunSuite {
+class MapToCategoryChoiceViewModelTests extends AnyFunSuite {
   test("Sut maps minimal categories model to view model") {
     val result = mapToCategoryChoiceViewModel(categories = List.empty)
     assert(result.message.nonEmpty)

@@ -1,7 +1,7 @@
 package org.kyotskin.trivia
 package presentation
 
-case class CategoryChoiceStepViewModel(
+case class DifficultyChoiceViewModel(
   message: String,
-  categories: List[String]
+  difficulties: List[String]
 )
