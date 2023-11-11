@@ -1,4 +1,4 @@
 package org.kyotskin.trivia
 package presentation
 
-case class RankingViewModel()
+case class LeaderboardViewModel()
