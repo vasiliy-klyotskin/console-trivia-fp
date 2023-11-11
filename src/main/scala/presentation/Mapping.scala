@@ -70,6 +70,13 @@ private def feedbackFor(correctAnswers: Int, questionsCount: Int, player: String
   }
 }
 
+def mapToCorrectAnswersViewModel(questions: List[Question]): CorrectAnswersViewModel = {
+  val presentedQuestions = indexedList(questions.map(_.text))
+  val presentedAnswers = questions.map(question => s"Correct Answer: ${question.correctAnswer}")
+  val items = presentedQuestions.zip(presentedAnswers).map((question, answer) => CorrectAnswersViewModelItem(question, answer))
+  CorrectAnswersViewModel(items)
+}
+
 private def indexedList(strings: List[String]): List[String] = {
   strings.zipWithIndex.map((str, index) => s"${index+1}. $str")
 }
