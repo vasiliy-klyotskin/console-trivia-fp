@@ -5,7 +5,4 @@ case class CorrectAnswersViewModel(
   items: List[CorrectAnswersViewModelItem]
 )
 
-case class CorrectAnswersViewModelItem(
-  question: String,
-  correctAnswer: String
-)
+case class CorrectAnswersViewModelItem(question: String, correctAnswer: String)
