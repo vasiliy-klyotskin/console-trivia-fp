@@ -1,11 +1,11 @@
 package org.kyotskin.trivia
 package networking
 
-case class QuestionDTO(
+case class QuestionRemoteDTO(
   id: String,
-  question: QuestionTextDTO,
+  question: QuestionTextRemoteDTO,
   correctAnswer: String,
   incorrectAnswers: List[String]
 )
 
-case class QuestionTextDTO(text: String)
+case class QuestionTextRemoteDTO(text: String)
