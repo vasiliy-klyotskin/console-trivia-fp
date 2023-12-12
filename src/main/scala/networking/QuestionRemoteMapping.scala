@@ -1,6 +1,7 @@
 package org.kyotskin.trivia
 package networking
 import domain.Question
+import domain.Difficulty
 import cats.effect.IO
 
 def map(remote: QuestionRemoteDTO, shuffle: List[String] => IO[List[String]]): IO[Question] = {
@@ -12,4 +13,9 @@ def map(remote: QuestionRemoteDTO, shuffle: List[String] => IO[List[String]]): I
       correctAnswer = remote.correctAnswer
     )
   )
+}
+
+def questionsUrl(difficulty: Difficulty): String = {
+  val difficultyString = difficulty.toString.toLowerCase
+  s"https://the-trivia-api.com/v2/questions?limit=10&difficulty=$difficultyString"
 }
