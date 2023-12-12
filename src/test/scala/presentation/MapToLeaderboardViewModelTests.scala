@@ -6,7 +6,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class MapToLeaderboardViewModelTests extends AnyFunSuite {
   test("Sut maps empty player models to view model") {
-    val current = Player("John Connor", 2350)
+    val current = FinalizedPlayer("John Connor", 2350)
     val result = mapToLeaderboardViewModel(players = List.empty, current)
     val expected = LeaderboardViewModel(
       title = "Trivia Leaderboard",
@@ -19,7 +19,7 @@ class MapToLeaderboardViewModelTests extends AnyFunSuite {
   }
 
   test("Sut maps player models that consist of just current player model to view model") {
-    val current = Player("John Connor", 2350)
+    val current = FinalizedPlayer("John Connor", 2350)
     val result = mapToLeaderboardViewModel(players = List(current), current)
     val expected = LeaderboardViewModel(
       title = "Trivia Leaderboard",
@@ -32,8 +32,8 @@ class MapToLeaderboardViewModelTests extends AnyFunSuite {
   }
 
   test("Sut maps player models model to view model") {
-    val players = List(Player("Ivan Ivanov", 6735), Player("Petya Petrov", 7910), Player("Anton Antonov", 1150), Player("John Connor", 2350))
-    val current = Player("John Connor", 2350)
+    val players = List(FinalizedPlayer("Ivan Ivanov", 6735), FinalizedPlayer("Petya Petrov", 7910), FinalizedPlayer("Anton Antonov", 1150), FinalizedPlayer("John Connor", 2350))
+    val current = FinalizedPlayer("John Connor", 2350)
     val result = mapToLeaderboardViewModel(players, current)
     val expected = LeaderboardViewModel(
       title = "Trivia Leaderboard",
