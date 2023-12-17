@@ -14,7 +14,7 @@ def mapToCategoryChoiceViewModel(categories: List[Category]): CategoryChoiceView
   CategoryChoiceViewModel(message, indexedList(categories.map(_.name)))
 }
 
-def mapToDifficultyChoiceViewModel(playerName: String, difficulties: List[Difficulty]): DifficultyChoiceViewModel = {
+def mapToDifficultyChoiceViewModel(playerName: PlayerName, difficulties: List[Difficulty]): DifficultyChoiceViewModel = {
   val message = s"Fantastic, $playerName! You've selected your categories. Now, it's time to choose the difficulty level for your trivia adventure. Please enter the number corresponding to your desired difficulty level:"
   DifficultyChoiceViewModel(message, indexedList(difficulties.map(mapDifficultyName)))
 }
@@ -42,17 +42,17 @@ def mapToQuestionViewModel(question: Question): QuestionViewModel = {
   QuestionViewModel(question.text, indexedList(question.possibleAnswers))
 }
 
-def mapToTriviaResultsViewModel(trivia: Trivia, player: String): TriviaResultsViewModel = {
+def mapToTriviaResultsViewModel(trivia: Trivia, playerName: PlayerName): TriviaResultsViewModel = {
   if (trivia.questions.isEmpty) {
     TriviaResultsViewModel(title = "", metrics = List.empty, feedback = "", farewellMessage = "")
   } else {
     val correctAnswers = trivia.answers.count(_.isCorrect)
     val questionsCount = trivia.questions.length
-    val title = s"Thank you, $player, for playing the Trivia Game!"
+    val title = s"Thank you, $playerName, for playing the Trivia Game!"
     val farewellMessage = "Hope you had a great time challenging your knowledge. Play again soon!"
     val scoreMetric = s"Your Score: ${fullScore(trivia.answers, trivia.difficulty)}"
     val accuracyMetric = s"Accuracy: $correctAnswers / $questionsCount"
-    val feedback = feedbackFor(correctAnswers, questionsCount, player)
+    val feedback = feedbackFor(correctAnswers, questionsCount, playerName)
     TriviaResultsViewModel(title, List(scoreMetric, accuracyMetric), feedback, farewellMessage)
   }
 }
