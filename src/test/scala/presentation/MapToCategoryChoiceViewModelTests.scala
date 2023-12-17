@@ -13,15 +13,15 @@ class MapToCategoryChoiceViewModelTests extends AnyFunSuite {
 
   test("Sut maps categories model to view model") {
     val categories = List(
-      Category("Music"),
-      Category("Science"),
-      Category("Art")
+      Category.Music,
+      Category.Science,
+      Category.ArtsAndLiterature
     )
     val result = mapToCategoryChoiceViewModel(categories)
     val expectedMappedCategories = List(
       "1. Music",
       "2. Science",
-      "3. Art"
+      "3. Arts and Literature"
     )
     assert(result.message.nonEmpty)
     assert(result.categories == expectedMappedCategories)

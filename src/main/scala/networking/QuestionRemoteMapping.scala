@@ -1,5 +1,6 @@
 package org.kyotskin.trivia
 package networking
+
 import domain.Question
 import domain.Difficulty
 
