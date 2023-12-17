@@ -16,6 +16,11 @@ enum Category {
   case GeneralKnowledge
 }
 
+enum CategoryChoice {
+  case Specific(categories: List[Category])
+  case All
+}
+
 def allCategories(): List[Category] = {
   List(
     Science,
