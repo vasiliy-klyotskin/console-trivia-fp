@@ -5,9 +5,13 @@ import presentation.validateName
 
 import org.scalatest.funsuite.AnyFunSuite
 
-class PlayerNameValidationsTest extends AnyFunSuite {
+class PlayerNameValidationTests extends AnyFunSuite {
   test("empty name is not allowed") {
     assert(validateName("").isEmpty)
+  }
+
+  test("only spaces are not allowed in name") {
+    assert(validateName("   ").isEmpty)
   }
 
   test("symbols other than letters and spaces are not allowed in the name") {
@@ -21,9 +25,5 @@ class PlayerNameValidationsTest extends AnyFunSuite {
 
   test("regular name validates correctly") {
     assert(validateName("Vasiliy").contains("Vasiliy"))
-  }
-
-  test("only spaces are not allowed in name") {
-    assert(validateName("   ").isEmpty)
   }
 }
