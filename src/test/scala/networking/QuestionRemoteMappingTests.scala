@@ -3,8 +3,6 @@ package networking
 
 import org.scalatest.funsuite.AnyFunSuite
 import domain.*
-import cats.effect.IO
-import cats.effect.unsafe.implicits.global
 
 class QuestionRemoteMappingTests extends AnyFunSuite {
   test("Url for difficulty is correct when all categories are selected") {

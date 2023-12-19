@@ -5,7 +5,7 @@ import presentation.validateName
 
 import org.scalatest.funsuite.AnyFunSuite
 
-class PlayerNameValidationsTests extends AnyFunSuite {
+class PlayerNameValidationsTest extends AnyFunSuite {
   test("empty name is not allowed") {
     assert(validateName("").isEmpty)
   }
