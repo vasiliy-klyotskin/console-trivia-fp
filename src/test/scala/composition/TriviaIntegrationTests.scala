@@ -4,26 +4,38 @@ package composition
 import presentation.*
 import ui.*
 
+import cats.effect.IO
 import org.scalatest.funsuite.AnyFunSuite
+import cats.effect.unsafe.implicits.global
 
-type StartTrivia = () => Unit
 type View = ConsoleCapture
 
 class TriviaIntegrationTests extends AnyFunSuite {
   test("Displays greetings on start") {
-    val (start, view) = makeSut()
-    start()
+    val view = makeSut()
 
     assert(view.isDisplaying(greetingViewModel()))
   }
 
-  private def makeSut(): (StartTrivia, View) = {
-    val view = ConsoleCapture()
-    val trivia = composeTrivia(uiEffects)
-    (view.runWithCapturingOutput(trivia), view)
+  // TODO: we need a smarter way of doing this
+  test("Displays error on incorrect name input") {
+    val view = makeSut()
+
+    view.input("!@#$%^&*(")
+
+    assert(view.isDisplaying(greetingViewModel()))
+    assert(view.isDisplaying(nameInputErrorViewModel()))
   }
 
-  private def uiEffects: UI = {
-    (consoleItem: TextItem) => ui.display(consoleItem)
+  private def makeSut(): View = {
+    val view = ConsoleCapture()
+    val trivia = composeTrivia(uiEffects)
+    view.runWithCapturingOutput(trivia)
+    view
+  }
+
+  private def uiEffects: UI = new UI {
+    override def display(textItem: TextItem): IO[Unit] = ui.printItem(textItem)
+    override def input: IO[String] = ui.readLine
   }
 }

@@ -3,8 +3,14 @@ package ui
 
 import cats.effect.IO
 
-def display(textItem: TextItem): IO[Unit] = {
+def printItem(textItem: TextItem): IO[Unit] = {
   IO.delay {
     print(textItem)
+  }
+}
+
+def readLine: IO[String] = {
+  IO.blocking {
+    scala.io.StdIn.readLine()
   }
 }
