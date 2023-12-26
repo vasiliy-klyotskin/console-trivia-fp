@@ -2,19 +2,11 @@ package org.kyotskin.trivia
 package networking
 
 import domain.*
-import domain.CategoryChoice.*
-import domain.Category.*
-
-def map(remote: QuestionRemoteDTO): Question = {
-  Question(
-    text = remote.question.text,
-    possibleAnswers = remote.incorrectAnswers.appended(remote.correctAnswer),
-    correctAnswer = remote.correctAnswer
-  )
-}
+import Category.*
+import CategoryChoice.*
 
 def questionsUrl(difficulty: Difficulty, categoriesChoice: CategoryChoice): String = {
-  val difficultyQuery = s"&difficulty=${difficulty.toString.toLowerCase}"
+  val difficultyQuery = s"&difficulties=${difficulty.toString.toLowerCase}"
   val categoriesQuery = categoriesChoice match {
     case All => ""
     case Specific(categories) => "&categories=" + categories.map(remoteCategory).mkString(",")

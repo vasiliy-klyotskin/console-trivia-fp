@@ -4,13 +4,13 @@ package networking
 import org.scalatest.funsuite.AnyFunSuite
 import domain.*
 
-class QuestionRemoteMappingTests extends AnyFunSuite {
+class QuestionRemoteUrlCreationsTests extends AnyFunSuite {
   test("Url for difficulty is correct when all categories are selected") {
     val difficulties = List(Difficulty.Easy, Difficulty.Medium, Difficulty.Hard)
     val expectedUrls = List(
-      "https://the-trivia-api.com/v2/questions?limit=10&difficulty=easy",
-      "https://the-trivia-api.com/v2/questions?limit=10&difficulty=medium",
-      "https://the-trivia-api.com/v2/questions?limit=10&difficulty=hard"
+      "https://the-trivia-api.com/v2/questions?limit=10&difficulties=easy",
+      "https://the-trivia-api.com/v2/questions?limit=10&difficulties=medium",
+      "https://the-trivia-api.com/v2/questions?limit=10&difficulties=hard"
     )
 
     assert(difficulties.map(questionsUrl(_, CategoryChoice.All)) == expectedUrls)
