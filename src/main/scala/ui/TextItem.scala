@@ -18,3 +18,8 @@ extension (vm: ErrorViewModel)
   def textItem(): TextItem = {
     vm.text + newLine
   }
+  
+extension (vm: CategoryChoiceViewModel)
+  def textItem(): TextItem = {
+    vm.message + newLine + vm.categories
+  }
