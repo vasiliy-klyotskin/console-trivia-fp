@@ -17,6 +17,14 @@ def validateCategory(availableCategories: List[Category])(input: String): Option
   }
 }
 
+def validateDifficulty(input: String): Option[Difficulty] = {
+  Option(input.trim)
+    .filter(_.nonEmpty)
+    .flatMap(_.toIntOption)
+    .filter(input => input > 0 && input < 4)
+    .map(index => Difficulty.fromOrdinal(index - 1))
+}
+
 private def specificCategories(input: String, allCategories: List[Category]): Option[List[Category]] = {
   Option(input.trim.split("\\s+").toList)
     .filter(areAllNumbers)

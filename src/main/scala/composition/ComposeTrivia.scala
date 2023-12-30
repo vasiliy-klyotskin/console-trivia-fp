@@ -49,11 +49,20 @@ def requestCategories(ui: UI): IO[Unit] = {
   for {
     categoryChoice <- ui.input.map(validateCategory(allCategories()))
     result <- categoryChoice.fold(tryRequestAgain)(IO.pure)
-  } yield result
+  } yield ()
 }
 
 def difficultyStep(ui: UI, playerName: PlayerName): IO[Unit] = {
   for {
     _ <- ui.display(allDifficultiesViewModel(playerName).textItem())
+    _ <- requestDifficultyInput(ui)
+  } yield ()
+}
+
+def requestDifficultyInput(ui: UI): IO[Unit] = {
+  val tryRequestAgain = ui.display(difficultyChoiceErrorViewModel().textItem()) >> requestDifficultyInput(ui)
+  for {
+    difficulty <- ui.input.map(validateDifficulty)
+    _ <- difficulty.fold(tryRequestAgain)(IO.pure)
   } yield ()
 }

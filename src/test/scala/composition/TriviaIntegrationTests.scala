@@ -62,6 +62,19 @@ class TriviaIntegrationTests extends AnyFunSuite {
     assert(spy.displayedTimes(allDifficultiesViewModel("Vasiliy").textItem()) == 1)
   }
 
+  test("Displays difficulty choice error on incorrect difficulty choice") {
+    val (spy, program) = makeSut()
+    spy.stub("Vasiliy")
+    spy.stub("1 3")
+    spy.stub("!@#$%^&*")
+    spy.stub("(*&^%$#)")
+
+    program.unsafeRunSync()
+
+    assert(spy.displayedTimes(allDifficultiesViewModel("Vasiliy").textItem()) == 1)
+    assert(spy.displayedTimes(difficultyChoiceErrorViewModel().textItem()) == 2)
+  }
+
   private def makeSut(): (Spy, IO[Unit]) = {
     val spy = TextUISpy()
     val trivia = composeTrivia(ui(spy)).handleError(_ => ())
