@@ -23,3 +23,8 @@ extension (vm: CategoryChoiceViewModel)
   def textItem(): TextItem = {
     vm.message + newLine + vm.categories
   }
+  
+extension (vm: DifficultyChoiceViewModel)
+  def textItem(): TextItem = {
+    vm.message + newLine + vm.difficulties
+  }

@@ -16,13 +16,7 @@ def composeTrivia(ui: UI): IO[Unit] = {
   for {
     playerName <- greetingsStep(ui)
     _ <- categoryStep(ui)
-  } yield ()
-}
-
-def categoryStep(ui: UI): IO[Unit] = {
-  for {
-    _ <- ui.display(allCategoriesViewModel().textItem())
-    _ <- requestCategories(ui)
+    _ <- difficultyStep(ui, playerName)
   } yield ()
 }
 
@@ -42,10 +36,24 @@ def requestPlayerName(ui: UI): IO[PlayerName] = {
   } yield result
 }
 
+def categoryStep(ui: UI): IO[Unit] = {
+  for {
+    _ <- ui.display(allCategoriesViewModel().textItem())
+    _ <- requestCategories(ui)
+    _ <- ui.clear
+  } yield ()
+}
+
 def requestCategories(ui: UI): IO[Unit] = {
   val tryRequestAgain = ui.display(categoryInputErrorViewModel().textItem()) >> requestCategories(ui)
   for {
     categoryChoice <- ui.input.map(validateCategory(allCategories()))
     result <- categoryChoice.fold(tryRequestAgain)(IO.pure)
   } yield result
+}
+
+def difficultyStep(ui: UI, playerName: PlayerName): IO[Unit] = {
+  for {
+    _ <- ui.display(allDifficultiesViewModel(playerName).textItem())
+  } yield ()
 }

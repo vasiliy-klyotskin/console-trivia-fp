@@ -46,9 +46,20 @@ class TriviaIntegrationTests extends AnyFunSuite {
     spy.stub("(*&^%$")
 
     program.unsafeRunSync()
-    
+
     assert(spy.displayedTimes(allCategoriesViewModel().textItem()) == 1)
     assert(spy.displayedTimes(categoryInputErrorViewModel().textItem()) == 2)
+  }
+
+  test("Displays difficulty choice on correct categories choice") {
+    val (spy, program) = makeSut()
+    spy.stub("Vasiliy")
+    spy.stub("1 3")
+
+    program.unsafeRunSync()
+
+    assert(spy.displayedTimes(allCategoriesViewModel().textItem()) == 0)
+    assert(spy.displayedTimes(allDifficultiesViewModel("Vasiliy").textItem()) == 1)
   }
 
   private def makeSut(): (Spy, IO[Unit]) = {

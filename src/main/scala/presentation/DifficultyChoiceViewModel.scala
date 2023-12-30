@@ -13,6 +13,10 @@ def mapToDifficultyChoiceViewModel(playerName: PlayerName, difficulties: List[Di
   DifficultyChoiceViewModel(message, indexedList(difficulties.map(mapDifficultyName)))
 }
 
+def allDifficultiesViewModel(playerName: PlayerName): DifficultyChoiceViewModel = {
+  mapToDifficultyChoiceViewModel(playerName, difficulties = Difficulty.values.toList)
+}
+
 private def mapDifficultyName(difficulty: Difficulty): String = {
   difficulty match {
     case Difficulty.Easy => "Easy"
