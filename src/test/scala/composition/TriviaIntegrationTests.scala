@@ -39,6 +39,18 @@ class TriviaIntegrationTests extends AnyFunSuite {
     assert(spy.displayedTimes(allCategoriesViewModel().textItem()) == 1)
   }
 
+  test("Displays categories choice error on incorrect categories input") {
+    val (spy, program) = makeSut()
+    spy.stub("Vasiliy")
+    spy.stub("#@(#*$")
+    spy.stub("(*&^%$")
+
+    program.unsafeRunSync()
+    
+    assert(spy.displayedTimes(allCategoriesViewModel().textItem()) == 1)
+    assert(spy.displayedTimes(categoryInputErrorViewModel().textItem()) == 2)
+  }
+
   private def makeSut(): (Spy, IO[Unit]) = {
     val spy = TextUISpy()
     val trivia = composeTrivia(ui(spy)).handleError(_ => ())

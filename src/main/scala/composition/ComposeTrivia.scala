@@ -22,6 +22,7 @@ def composeTrivia(ui: UI): IO[Unit] = {
 def categoryStep(ui: UI): IO[Unit] = {
   for {
     _ <- ui.display(allCategoriesViewModel().textItem())
+    _ <- requestCategories(ui)
   } yield ()
 }
 
@@ -38,5 +39,13 @@ def requestPlayerName(ui: UI): IO[PlayerName] = {
   for {
     playerName <- ui.input.map(validateName)
     result <- playerName.fold(tryRequestAgain)(IO.pure)
+  } yield result
+}
+
+def requestCategories(ui: UI): IO[Unit] = {
+  val tryRequestAgain = ui.display(categoryInputErrorViewModel().textItem()) >> requestCategories(ui)
+  for {
+    categoryChoice <- ui.input.map(validateCategory(allCategories()))
+    result <- categoryChoice.fold(tryRequestAgain)(IO.pure)
   } yield result
 }
