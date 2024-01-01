@@ -12,7 +12,7 @@ case class LeaderboardViewModel(
 
 def mapToLeaderboardViewModel(players: List[FinalizedPlayer], current: FinalizedPlayer): LeaderboardViewModel = {
   val title = "Trivia Leaderboard"
-  val message = "Keep playing and improving your knowledge!"
+  val message = "Keep playing and improving your knowledge! Enter something to try again!"
   val noOtherPlayers = !players.exists(_ != current)
   if (noOtherPlayers) {
     val yourPlace = s"Oh, it seems like there is no one other than you! Your highest score is ${current.topScore}"

@@ -12,7 +12,7 @@ class MapToLeaderboardViewModelTests extends AnyFunSuite {
       title = "Trivia Leaderboard",
       items = List.empty,
       yourPlace = "Oh, it seems like there is no one other than you! Your highest score is 2350",
-      message = "Keep playing and improving your knowledge!"
+      message = "Keep playing and improving your knowledge! Enter something to try again!"
     )
 
     assert(result == expected)
@@ -25,7 +25,7 @@ class MapToLeaderboardViewModelTests extends AnyFunSuite {
       title = "Trivia Leaderboard",
       items = List.empty,
       yourPlace = "Oh, it seems like there is no one other than you! Your highest score is 2350",
-      message = "Keep playing and improving your knowledge!"
+      message = "Keep playing and improving your knowledge! Enter something to try again!"
     )
 
     assert(result == expected)
@@ -44,7 +44,7 @@ class MapToLeaderboardViewModelTests extends AnyFunSuite {
         "4. Anton Antonov   1150"
       ),
       yourPlace = "Your place is 3 with a score of 2350",
-      message = "Keep playing and improving your knowledge!"
+      message = "Keep playing and improving your knowledge! Enter something to try again!"
     )
 
     assert(result == expected)

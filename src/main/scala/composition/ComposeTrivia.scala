@@ -20,11 +20,19 @@ trait DataAccess {
 def composeTrivia(ui: UI, dataAccess: DataAccess): IO[Unit] = {
   for {
     playerName <- greetingsStep(ui)
+    _ <- composeTriviaForGivenName(ui, dataAccess, playerName)
+  } yield ()
+}
+
+def composeTriviaForGivenName(ui: UI, dataAccess: DataAccess, playerName: PlayerName): IO[Unit] = {
+  for {
     categoryChoice <- categoryStep(ui)
     difficulty <- difficultyStep(ui, playerName)
     questions <- loadQuestionsStep(ui, dataAccess, difficulty, categoryChoice)
     completedTrivia <- triviaStep(ui, questions, difficulty)
     _ <- gameResultsStep(ui, completedTrivia, playerName)
+    _ <- leaderboardStep(ui)
+    - <- composeTriviaForGivenName(ui, dataAccess, playerName)
   } yield ()
 }
 
@@ -127,5 +135,14 @@ def gameResultsStep(ui: UI, completedTrivia: Trivia, playerName: PlayerName): IO
   for {
     _ <- ui.clear
     _ <- ui.display(mapToTriviaResultsViewModel(completedTrivia, playerName).textItem())
+    _ <- ui.input
+  } yield ()
+}
+
+def leaderboardStep(ui: UI): IO[Unit] = {
+  for {
+    _ <- ui.clear
+    _ <- ui.display(mapToLeaderboardViewModel(List.empty, FinalizedPlayer("any", 0)).textItem())
+    _ <- ui.input
   } yield ()
 }

@@ -17,7 +17,7 @@ def mapToTriviaResultsViewModel(trivia: Trivia, playerName: PlayerName): TriviaR
     val correctAnswers = trivia.answers.count(_.isCorrect)
     val questionsCount = trivia.questions.length
     val title = s"Thank you, $playerName, for playing the Trivia Game!"
-    val farewellMessage = "Hope you had a great time challenging your knowledge. Play again soon!"
+    val farewellMessage = "Hope you had a great time challenging your knowledge. Enter something to see Leaderboard!"
     val scoreMetric = s"Your Score: ${fullScore(trivia.answers, trivia.difficulty)}"
     val accuracyMetric = s"Accuracy: $correctAnswers / $questionsCount"
     val feedback = feedbackFor(correctAnswers, questionsCount, playerName)

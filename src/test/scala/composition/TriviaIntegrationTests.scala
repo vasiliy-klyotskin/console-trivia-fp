@@ -117,24 +117,21 @@ class TriviaIntegrationTests extends AnyFunSuite {
 
   test("Displays the first question and request the answer again on incorrect input") {
     val (view, dataAccess, program) = makeSut()
-    val question = Question("question text", List("answer 1", "answer 2"), "answer 3")
     stubInputsToStartTrivia(view)
     view.stub("incorrect input for the first question")
     view.stub("another incorrect input for the first question")
-    dataAccess.stubQuestions(Some(List(question)))
+    dataAccess.stubQuestions(Some(List(firstQuestion)))
 
     program.unsafeRunSync()
 
     assert(view.displayedTimes(questionsReadyViewModel.textItem()) == 0)
     assert(view.containsInDisplayed("Progress:") == 1)
-    assert(view.displayedTimes(mapToQuestionViewModel(question).textItem()) == 1)
+    assert(view.displayedTimes(mapToQuestionViewModel(firstQuestion).textItem()) == 1)
     assert(view.displayedTimes(answerInputErrorViewModel.textItem()) == 2)
   }
 
   test("Displays the second question on the first valid answer input") {
     val (view, dataAccess, program) = makeSut()
-    val firstQuestion = Question("question text", List("answer 1", "answer 2"), "answer 2")
-    val secondQuestion = Question("another question text", List("answer 3", "answer 4"), "answer 3")
     stubInputsToStartTrivia(view)
     view.stub("incorrect input for the first question")
     view.stub("1")
@@ -150,18 +147,36 @@ class TriviaIntegrationTests extends AnyFunSuite {
 
   test("Displays end game message when valid answers to all questions are given") {
     val (view, dataAccess, program) = makeSut()
-    val firstQuestion = Question("question text", List("answer 1", "answer 2"), "answer 2")
-    val secondQuestion = Question("another question text", List("answer 3", "answer 4"), "answer 3")
-    stubInputsToStartTrivia(view)
-    view.stub("1")
-    view.stub("1")
-    dataAccess.stubQuestions(Some(List(firstQuestion, secondQuestion)))
+    stubToCompleteTrivia(view, dataAccess)
 
     program.unsafeRunSync()
 
     assert(view.containsInDisplayed("Progress:") == 0)
     assert(view.displayedTimes(mapToQuestionViewModel(secondQuestion).textItem()) == 0)
     assert(view.containsInDisplayed("Your Score:") == 1)
+  }
+
+  test("Displays leaderboard after game is over and any input provided by user") {
+    val (view, dataAccess, program) = makeSut()
+    stubToCompleteTrivia(view, dataAccess)
+    view.stub("any")
+    
+    program.unsafeRunSync()
+    
+    assert(view.containsInDisplayed("Your Score:") == 0)
+    assert(view.containsInDisplayed("Trivia Leaderboard") == 1)
+  }
+
+  test("Starts new game after user provides any input on leaderboard step") {
+    val (view, dataAccess, program) = makeSut()
+    stubToCompleteTrivia(view, dataAccess)
+    view.stub("any")
+    view.stub("any")
+
+    program.unsafeRunSync()
+
+    assert(view.containsInDisplayed("Trivia Leaderboard") == 0)
+    assert(view.displayedTimes(allCategoriesViewModel.textItem()) == 1)
   }
 
   // MARK: Helpers
@@ -187,5 +202,20 @@ class TriviaIntegrationTests extends AnyFunSuite {
     view.stub("1 3")
     view.stub("2")
     view.stub("")
+  }
+
+  private def stubToCompleteTrivia(view: ViewSpy, dataAccess: DataAccessStub): Unit = {
+    stubInputsToStartTrivia(view)
+    view.stub("1")
+    view.stub("1")
+    dataAccess.stubQuestions(Some(List(firstQuestion, secondQuestion)))
+  }
+
+  private def firstQuestion: Question = {
+    Question("question text", List("answer 1", "answer 2"), "answer 2")
+  }
+
+  private def secondQuestion: Question = {
+    Question("another question text", List("answer 3", "answer 4"), "answer 3")
   }
 }
