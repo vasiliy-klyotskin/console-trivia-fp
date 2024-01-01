@@ -23,7 +23,8 @@ def composeTrivia(ui: UI, dataAccess: DataAccess): IO[Unit] = {
     categoryChoice <- categoryStep(ui)
     difficulty <- difficultyStep(ui, playerName)
     questions <- loadQuestionsStep(ui, dataAccess, difficulty, categoryChoice)
-    _ <- triviaStep(ui, questions, difficulty)
+    completedTrivia <- triviaStep(ui, questions, difficulty)
+    _ <- gameResultsStep(ui, completedTrivia, playerName)
   } yield ()
 }
 
@@ -120,4 +121,11 @@ def requestAnswerInput(ui: UI, trivia: Trivia, question: Question): IO[Answer] =
     answerInputResult <- ui.input.map(validateAnswer(question, 0.0))
     answer <- answerInputResult.fold(tryInputAnswerAgain)(IO.pure)
   } yield answer
+}
+
+def gameResultsStep(ui: UI, completedTrivia: Trivia, playerName: PlayerName): IO[Unit] = {
+  for {
+    _ <- ui.clear
+    _ <- ui.display(mapToTriviaResultsViewModel(completedTrivia, playerName).textItem())
+  } yield ()
 }

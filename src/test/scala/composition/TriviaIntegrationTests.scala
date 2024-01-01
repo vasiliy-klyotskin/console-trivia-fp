@@ -148,6 +148,22 @@ class TriviaIntegrationTests extends AnyFunSuite {
     assert(view.displayedTimes(mapToQuestionViewModel(secondQuestion).textItem()) == 1)
   }
 
+  test("Displays end game message when valid answers to all questions are given") {
+    val (view, dataAccess, program) = makeSut()
+    val firstQuestion = Question("question text", List("answer 1", "answer 2"), "answer 2")
+    val secondQuestion = Question("another question text", List("answer 3", "answer 4"), "answer 3")
+    stubInputsToStartTrivia(view)
+    view.stub("1")
+    view.stub("1")
+    dataAccess.stubQuestions(Some(List(firstQuestion, secondQuestion)))
+
+    program.unsafeRunSync()
+
+    assert(view.containsInDisplayed("Progress:") == 0)
+    assert(view.displayedTimes(mapToQuestionViewModel(secondQuestion).textItem()) == 0)
+    assert(view.containsInDisplayed("Your Score:") == 1)
+  }
+
   // MARK: Helpers
 
   private def makeSut(): (ViewSpy, DataAccessStub, IO[Unit]) = {

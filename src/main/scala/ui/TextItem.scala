@@ -48,3 +48,11 @@ extension (vm: QuestionViewModel)
   def textItem(): TextItem = {
     vm.question + newLine + newLine + vm.possibleAnswers.mkString(newLine) + newLine
   }
+  
+extension (vm: TriviaResultsViewModel)
+  def textItem(): TextItem = {
+    vm.title + newLine + newLine + 
+    vm.metrics.mkString(newLine) + newLine + newLine + 
+    vm.feedback + newLine + newLine +
+    vm.farewellMessage + newLine
+  }
