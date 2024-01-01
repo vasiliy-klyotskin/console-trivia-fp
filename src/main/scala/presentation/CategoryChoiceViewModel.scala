@@ -15,7 +15,7 @@ def mapToCategoryChoiceViewModel(categories: List[Category]): CategoryChoiceView
   CategoryChoiceViewModel(message, indexedList(categories.map(nameFor)))
 }
 
-def allCategoriesViewModel(): CategoryChoiceViewModel = {
+def allCategoriesViewModel: CategoryChoiceViewModel = {
   mapToCategoryChoiceViewModel(allCategories())
 }
 

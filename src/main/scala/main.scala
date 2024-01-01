@@ -7,5 +7,13 @@ import ui.*
 import cats.effect.IO
 @main
 def main(): Unit = {
+  composeTrivia(makeUi).unsafeRunSync()
+}
 
+private def makeUi: UI = new UI {
+  override def display(textItem: TextItem): IO[Unit] = printItem(textItem)
+
+  override def clear: IO[Unit] = printItem(clearItem)
+
+  override def input: IO[String] = readLine
 }

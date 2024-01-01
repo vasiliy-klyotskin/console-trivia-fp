@@ -6,3 +6,5 @@ case class Question(
   possibleAnswers: List[String],
   correctAnswer: String
 )
+
+type Questions = List[Question]

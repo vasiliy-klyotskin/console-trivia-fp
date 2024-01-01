@@ -6,7 +6,7 @@ import presentation.*
 type TextItem = String
 
 def newLine: String = "\n"
-def clear: String = "\u001b[2J"
+def clearItem: String = "\u001b[2J"
 
 extension (vm: GreetingViewModel)
   def textItem(): TextItem = {
@@ -21,10 +21,20 @@ extension (vm: ErrorViewModel)
   
 extension (vm: CategoryChoiceViewModel)
   def textItem(): TextItem = {
-    vm.message + newLine + vm.categories
+    vm.message + newLine + vm.categories.mkString(newLine) + newLine
   }
   
 extension (vm: DifficultyChoiceViewModel)
   def textItem(): TextItem = {
-    vm.message + newLine + vm.difficulties
+    vm.message + newLine + vm.difficulties.mkString(newLine) + newLine
+  }
+
+extension (vm: QuestionLoadingViewModel)
+  def textItem(): TextItem = {
+    vm.text + newLine
+  }
+
+extension (vm: QuestionsReadyViewModel)
+  def textItem(): TextItem = {
+    vm.text + newLine
   }
