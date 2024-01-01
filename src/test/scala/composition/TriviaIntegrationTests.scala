@@ -115,13 +115,15 @@ class TriviaIntegrationTests extends AnyFunSuite {
     assert(view.displayedTimes(questionsReadyViewModel.textItem()) == 1)
   }
 
-  test("Displays the first question on start of the trivia") {
+  test("Displays the first question and request the answer again on incorrect input") {
     val (view, dataAccess, program) = makeSut()
     val question = Question("question text", List("answer 1", "answer 2"), "answer 3")
     view.stub("Vasiliy")
     view.stub("1 3")
     view.stub("2")
     view.stub("")
+    view.stub("incorrect input for the first question")
+    view.stub("another incorrect input for the first question")
     dataAccess.stubQuestions(Some(List(question)))
 
     program.unsafeRunSync()
@@ -129,6 +131,7 @@ class TriviaIntegrationTests extends AnyFunSuite {
     assert(view.displayedTimes(questionsReadyViewModel.textItem()) == 0)
     assert(view.containsInDisplayed("Progress:") == 1)
     assert(view.displayedTimes(mapToQuestionViewModel(question).textItem()) == 1)
+    assert(view.displayedTimes(answerInputErrorViewModel.textItem()) == 2)
   }
 
   private def makeSut(): (ViewSpy, DataAccessStub, IO[Unit]) = {

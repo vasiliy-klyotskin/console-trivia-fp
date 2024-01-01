@@ -14,3 +14,7 @@ def categoryInputErrorViewModel: ErrorViewModel = {
 def difficultyChoiceErrorViewModel: ErrorViewModel = {
   ErrorViewModel("Invalid input. Please enter a valid number corresponding to your desired difficulty level.")
 }
+
+def answerInputErrorViewModel: ErrorViewModel = {
+  ErrorViewModel("Invalid input. Please enter a valid number corresponding to chosen answer.")
+}

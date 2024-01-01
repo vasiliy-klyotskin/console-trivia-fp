@@ -25,6 +25,14 @@ def validateDifficulty(input: String): Option[Difficulty] = {
     .map(index => Difficulty.fromOrdinal(index - 1))
 }
 
+def validateAnswer(question: Question, time: Double)(input: String): Option[Answer] = {
+  Option(input.trim)
+    .flatMap(_.toIntOption)
+    .flatMap(index => question.possibleAnswers.lift(index - 1))
+    .map(_ == question.correctAnswer)
+    .map(isAnswerCorrect => Answer(isAnswerCorrect, time, question.text.trim.split("\\s+").length))
+}
+
 private def specificCategories(input: String, allCategories: List[Category]): Option[List[Category]] = {
   Option(input.trim.split("\\s+").toList)
     .filter(areAllNumbers)

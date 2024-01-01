@@ -1,10 +1,11 @@
 package org.kyotskin.trivia
 package domain
 
+type AnswerText = String
+type Questions = List[Question]
+
 case class Question(
   text: String,
-  possibleAnswers: List[String],
-  correctAnswer: String
+  possibleAnswers: List[AnswerText],
+  correctAnswer: AnswerText
 )
-
-type Questions = List[Question]

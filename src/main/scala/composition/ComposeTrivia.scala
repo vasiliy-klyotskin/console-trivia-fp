@@ -101,8 +101,19 @@ def fetchQuestions(dataAccess: DataAccess, difficulty: Difficulty, categoryChoic
 }
 
 def processQuestion(ui: UI, trivia: Trivia, question: Question): IO[Unit] = {
+  val tryInputAnswerAgain = ui.display(answerInputErrorViewModel.textItem()) >> processQuestion(ui, trivia, question)
   for {
     _ <- ui.display(mapToStatusViewModel(trivia).textItem())
     _ <- ui.display(mapToQuestionViewModel(question).textItem())
+    answer <- requestAnswerInput(ui, trivia, question)
   } yield ()
+}
+
+
+def requestAnswerInput(ui: UI, trivia: Trivia, question: Question): IO[Answer] = {
+  val tryInputAnswerAgain = ui.display(answerInputErrorViewModel.textItem()) >> requestAnswerInput(ui, trivia, question)
+  for {
+    answerInputResult <- ui.input.map(validateAnswer(question, 0.0))
+    answer <- answerInputResult.fold(tryInputAnswerAgain)(IO.pure)
+  } yield answer
 }
