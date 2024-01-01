@@ -115,6 +115,22 @@ class TriviaIntegrationTests extends AnyFunSuite {
     assert(view.displayedTimes(questionsReadyViewModel.textItem()) == 1)
   }
 
+  test("Displays the first question on start of the trivia") {
+    val (view, dataAccess, program) = makeSut()
+    val question = Question("question text", List("answer 1", "answer 2"), "answer 3")
+    view.stub("Vasiliy")
+    view.stub("1 3")
+    view.stub("2")
+    view.stub("")
+    dataAccess.stubQuestions(Some(List(question)))
+
+    program.unsafeRunSync()
+
+    assert(view.displayedTimes(questionsReadyViewModel.textItem()) == 0)
+    assert(view.containsInDisplayed("Progress:") == 1)
+    assert(view.displayedTimes(mapToQuestionViewModel(question).textItem()) == 1)
+  }
+
   private def makeSut(): (ViewSpy, DataAccessStub, IO[Unit]) = {
     val viewSpy = TextUISpy()
     val dataAccessStub = DataAccessStub()

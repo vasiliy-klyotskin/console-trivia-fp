@@ -38,3 +38,13 @@ extension (vm: QuestionsReadyViewModel)
   def textItem(): TextItem = {
     vm.text + newLine
   }
+
+extension (vm: StatusViewModel)
+  def textItem(): TextItem = {
+    vm.progressTitle + newLine + vm.scoreTitle + newLine + vm.progressIndicator + newLine
+  }
+
+extension (vm: QuestionViewModel)
+  def textItem(): TextItem = {
+    vm.question + newLine + newLine + vm.possibleAnswers.mkString(newLine) + newLine
+  }

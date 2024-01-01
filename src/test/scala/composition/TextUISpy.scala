@@ -36,4 +36,8 @@ class TextUISpy() {
   def displayedTimes(textItem: TextItem): Int = {
     displayedItems.count(textItem == _)
   }
+  
+  def containsInDisplayed(textItem: TextItem): Int = {
+    displayedItems.count(_.contains(textItem))
+  }
 }
