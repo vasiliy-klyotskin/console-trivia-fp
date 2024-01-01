@@ -7,7 +7,7 @@ import ui.*
 import cats.effect.IO
 @main
 def main(): Unit = {
-  composeTrivia(makeUi).unsafeRunSync()
+
 }
 
 private def makeUi: UI = new UI {

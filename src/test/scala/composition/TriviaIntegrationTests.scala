@@ -118,10 +118,7 @@ class TriviaIntegrationTests extends AnyFunSuite {
   test("Displays the first question and request the answer again on incorrect input") {
     val (view, dataAccess, program) = makeSut()
     val question = Question("question text", List("answer 1", "answer 2"), "answer 3")
-    view.stub("Vasiliy")
-    view.stub("1 3")
-    view.stub("2")
-    view.stub("")
+    stubInputsToStartTrivia(view)
     view.stub("incorrect input for the first question")
     view.stub("another incorrect input for the first question")
     dataAccess.stubQuestions(Some(List(question)))
@@ -133,6 +130,25 @@ class TriviaIntegrationTests extends AnyFunSuite {
     assert(view.displayedTimes(mapToQuestionViewModel(question).textItem()) == 1)
     assert(view.displayedTimes(answerInputErrorViewModel.textItem()) == 2)
   }
+
+  test("Displays the second question on the first valid answer input") {
+    val (view, dataAccess, program) = makeSut()
+    val firstQuestion = Question("question text", List("answer 1", "answer 2"), "answer 2")
+    val secondQuestion = Question("another question text", List("answer 3", "answer 4"), "answer 3")
+    stubInputsToStartTrivia(view)
+    view.stub("incorrect input for the first question")
+    view.stub("1")
+    dataAccess.stubQuestions(Some(List(firstQuestion, secondQuestion)))
+
+    program.unsafeRunSync()
+
+    assert(view.displayedTimes(mapToQuestionViewModel(firstQuestion).textItem()) == 0)
+    assert(view.displayedTimes(answerInputErrorViewModel.textItem()) == 0)
+    assert(view.containsInDisplayed("Progress:") == 1)
+    assert(view.displayedTimes(mapToQuestionViewModel(secondQuestion).textItem()) == 1)
+  }
+
+  // MARK: Helpers
 
   private def makeSut(): (ViewSpy, DataAccessStub, IO[Unit]) = {
     val viewSpy = TextUISpy()
@@ -149,4 +165,11 @@ class TriviaIntegrationTests extends AnyFunSuite {
 
   private def dataAccess(stub: DataAccessStub): DataAccess = new DataAccess:
     override def fetchQuestions(url: String): IO[Option[Questions]] = stub.fetchQuestions(url)
+
+  private def stubInputsToStartTrivia(view: ViewSpy): Unit = {
+    view.stub("Vasiliy")
+    view.stub("1 3")
+    view.stub("2")
+    view.stub("")
+  }
 }
