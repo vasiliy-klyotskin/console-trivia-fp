@@ -1,6 +1,7 @@
 # Console Trivia Application
 
-![Uploading Screenshot 2024-01-02 at 20.32.07.png…]()
+<img width="1166" alt="Screenshot 2024-01-02 at 20 32 07" src="https://github.com/vasiliy-klyotskin/trivia-fp/assets/54911315/c3212e12-2412-4b2a-8c0b-5856619071fa">
+
 
 This repository contains a console-based trivia application written in the functional programming paradigm.
 
