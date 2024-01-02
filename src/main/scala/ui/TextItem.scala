@@ -5,14 +5,13 @@ import presentation.*
 
 type TextItem = String
 
-def newLine: String = "\n"
-def clearItem: String = "\u001b[2J"
+def newLine: String = "\n "
+def clearItem: String = "\u001b[2J" + newLine.repeat(30)
 
 extension (vm: GreetingViewModel)
   def textItem(): TextItem = {
     vm.title + newLine + newLine + vm.message + newLine + newLine + vm.requestToProceed + newLine + newLine
   }
-
 
 extension (vm: ErrorViewModel)
   def textItem(): TextItem = {
