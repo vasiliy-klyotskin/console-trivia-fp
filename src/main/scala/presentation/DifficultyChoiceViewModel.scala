@@ -8,13 +8,13 @@ case class DifficultyChoiceViewModel(
   difficulties: List[String]
 )
 
-def mapToDifficultyChoiceViewModel(playerName: PlayerName, difficulties: List[Difficulty]): DifficultyChoiceViewModel = {
-  val message = s"Fantastic, $playerName! You've selected your categories. Now, it's time to choose the difficulty level for your trivia adventure. Please enter the number corresponding to your desired difficulty level:"
+def mapToDifficultyChoiceViewModel(difficulties: List[Difficulty]): DifficultyChoiceViewModel = {
+  val message = s"Fantastic, You've selected your categories. Now, it's time to choose the difficulty level for your trivia adventure. Please enter the number corresponding to your desired difficulty level:"
   DifficultyChoiceViewModel(message, indexedList(difficulties.map(mapDifficultyName)))
 }
 
-def allDifficultiesViewModel(playerName: PlayerName): DifficultyChoiceViewModel = {
-  mapToDifficultyChoiceViewModel(playerName, difficulties = Difficulty.values.toList)
+def allDifficultiesViewModel: DifficultyChoiceViewModel = {
+  mapToDifficultyChoiceViewModel(Difficulty.values.toList)
 }
 
 private def mapDifficultyName(difficulty: Difficulty): String = {

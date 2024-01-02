@@ -13,7 +13,7 @@ class QuestionRemoteDataSourceTests extends AnyFunSuite {
     val url = questionsUrl(difficulty, CategoryChoice.Specific(categories))
     val client = createHttpClient()
 
-    val result = fetchRemoteQuestions(client)(url).unsafeRunSync()
+    val result = fetchRemoteQuestions(client)(url).unsafeRunSync().get
 
     assert(result.length == 10)
     assert(result.forall(_.difficulty == "hard"))

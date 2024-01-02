@@ -10,7 +10,7 @@ def clearItem: String = "\u001b[2J"
 
 extension (vm: GreetingViewModel)
   def textItem(): TextItem = {
-    vm.greeting + newLine + newLine + vm.nameRequest + newLine
+    vm.title + newLine + newLine + vm.message + newLine + newLine + vm.requestToProceed + newLine + newLine
   }
 
 
@@ -55,12 +55,4 @@ extension (vm: TriviaResultsViewModel)
     vm.metrics.mkString(newLine) + newLine + newLine + 
     vm.feedback + newLine + newLine +
     vm.farewellMessage + newLine + newLine
-  }
-  
-extension (vm: LeaderboardViewModel)
-  def textItem(): TextItem = {
-    vm.title + newLine + newLine + 
-    vm.items.mkString(newLine) + newLine + newLine +
-    vm.yourPlace + newLine + newLine +
-    vm.message + newLine + newLine
   }

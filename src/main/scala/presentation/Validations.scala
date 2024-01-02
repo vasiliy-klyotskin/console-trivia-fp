@@ -3,12 +3,6 @@ package presentation
 
 import domain.*
 
-def validateName(input: String): Option[PlayerName] = {
-  Option(input.trim)
-    .filter(_.nonEmpty)
-    .filter(_.forall(char => char.isLetter || char.isWhitespace))
-}
-
 def validateCategory(availableCategories: List[Category])(input: String): Option[CategoryChoice] = {
   if (input.trim == "all") {
     Some(CategoryChoice.All)

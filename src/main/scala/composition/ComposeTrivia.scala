@@ -7,49 +7,29 @@ import presentation.*
 import ui.*
 import networking.*
 
-trait UI {
-  def display(textItem: TextItem): IO[Unit]
-  def clear: IO[Unit]
-  def input: IO[String]
-}
-
-trait DataAccess {
-  def fetchQuestions(url: String): IO[Option[Questions]]
-}
-
 def composeTrivia(ui: UI, dataAccess: DataAccess): IO[Unit] = {
   for {
-    playerName <- greetingsStep(ui)
-    _ <- composeTriviaForGivenName(ui, dataAccess, playerName)
-  } yield ()
-}
-
-def composeTriviaForGivenName(ui: UI, dataAccess: DataAccess, playerName: PlayerName): IO[Unit] = {
-  for {
+    _ <- greetingsStep(ui)
     categoryChoice <- categoryStep(ui)
-    difficulty <- difficultyStep(ui, playerName)
+    difficulty <- difficultyStep(ui)
     questions <- loadQuestionsStep(ui, dataAccess, difficulty, categoryChoice)
-    completedTrivia <- triviaStep(ui, questions, difficulty)
-    _ <- gameResultsStep(ui, completedTrivia, playerName)
-    _ <- leaderboardStep(ui)
-    - <- composeTriviaForGivenName(ui, dataAccess, playerName)
+    completedTrivia <- triviaStep(ui, dataAccess, questions, difficulty)
+    _ <- gameResultsStep(ui, completedTrivia)
+    _ <- composeTrivia(ui, dataAccess)
   } yield ()
 }
 
-def greetingsStep(ui: UI): IO[PlayerName] = {
+// MARK: Greetings Step
+
+def greetingsStep(ui: UI): IO[Unit] = {
   for {
+    _ <- ui.clear
     _ <- ui.display(greetingViewModel.textItem())
-    result <- requestPlayerName(ui)
-  } yield result
+    _ <- ui.input
+  } yield ()
 }
 
-def requestPlayerName(ui: UI): IO[PlayerName] = {
-  val tryRequestAgain = ui.display(nameInputErrorViewModel.textItem()) >> requestPlayerName(ui)
-  for {
-    playerName <- ui.input.map(validateName)
-    result <- playerName.fold(tryRequestAgain)(IO.pure)
-  } yield result
-}
+// MARK: Categories Step
 
 def categoryStep(ui: UI): IO[CategoryChoice] = {
   for {
@@ -67,10 +47,12 @@ def requestCategoriesInput(ui: UI): IO[CategoryChoice] = {
   } yield categoryChoice
 }
 
-def difficultyStep(ui: UI, playerName: PlayerName): IO[Difficulty] = {
+// MARK: Difficulty Step
+
+def difficultyStep(ui: UI): IO[Difficulty] = {
   for {
     _ <- ui.clear
-    _ <- ui.display(allDifficultiesViewModel(playerName).textItem())
+    _ <- ui.display(allDifficultiesViewModel.textItem())
     difficulty <- requestDifficultyInput(ui)
   } yield difficulty
 }
@@ -82,6 +64,8 @@ def requestDifficultyInput(ui: UI): IO[Difficulty] = {
     difficulty <- difficultyResult.fold(tryRequestAgain)(IO.pure)
   } yield difficulty
 }
+
+// MARK: Load Questions Step
 
 def loadQuestionsStep(ui: UI, dataAccess: DataAccess, difficulty: Difficulty, categoryChoice: CategoryChoice): IO[Questions] = {
   for {
@@ -107,42 +91,41 @@ def askUserIfHeWantsToStart(ui: UI): IO[Unit] = {
   } yield ()
 }
 
-def triviaStep(ui: UI, questions: Questions, difficulty: Difficulty): IO[Trivia] = {
+// MARK: Trivia Step
+
+def triviaStep(ui: UI, dataAccess: DataAccess, questions: Questions, difficulty: Difficulty): IO[Trivia] = {
   val newTrivia = IO.pure(initialTrivia(questions, difficulty))
-  questions.foldLeft(newTrivia)((trivia, question) => trivia.flatMap(processQuestion(ui, _, question)))
+  questions.foldLeft(newTrivia)((trivia, question) => trivia.flatMap(processQuestion(ui, dataAccess, _, question)))
 }
 
-def processQuestion(ui: UI, trivia: Trivia, question: Question): IO[Trivia] = {
-  val tryInputAnswerAgain = ui.display(answerInputErrorViewModel.textItem()) >> processQuestion(ui, trivia, question)
+def processQuestion(ui: UI, dataAccess: DataAccess, trivia: Trivia, question: Question): IO[Trivia] = {
+  val tryInputAnswerAgain = ui.display(answerInputErrorViewModel.textItem()) >> processQuestion(ui, dataAccess, trivia, question)
   for {
     _ <- ui.clear
     _ <- ui.display(mapToStatusViewModel(trivia).textItem())
     _ <- ui.display(mapToQuestionViewModel(question).textItem())
-    answer <- requestAnswerInput(ui, trivia, question)
+    startTime <- dataAccess.measureTime
+    answer <- requestAnswerInput(ui, dataAccess, startTime, question)
     updatedTrivia = Trivia(trivia.questions, trivia.answers.appended(answer), trivia.difficulty)
   } yield updatedTrivia
 }
 
-def requestAnswerInput(ui: UI, trivia: Trivia, question: Question): IO[Answer] = {
-  val tryInputAnswerAgain = ui.display(answerInputErrorViewModel.textItem()) >> requestAnswerInput(ui, trivia, question)
+def requestAnswerInput(ui: UI, dataAccess: DataAccess, startTime: Double, question: Question): IO[Answer] = {
+  val tryInputAnswerAgain = ui.display(answerInputErrorViewModel.textItem()) >> requestAnswerInput(ui, dataAccess, startTime, question)
   for {
-    answerInputResult <- ui.input.map(validateAnswer(question, 0.0))
+    input <- ui.input
+    endTime <- dataAccess.measureTime
+    answerInputResult = validateAnswer(question, endTime - startTime)(input)
     answer <- answerInputResult.fold(tryInputAnswerAgain)(IO.pure)
   } yield answer
 }
 
-def gameResultsStep(ui: UI, completedTrivia: Trivia, playerName: PlayerName): IO[Unit] = {
-  for {
-    _ <- ui.clear
-    _ <- ui.display(mapToTriviaResultsViewModel(completedTrivia, playerName).textItem())
-    _ <- ui.input
-  } yield ()
-}
+// MARK: Game Result Step
 
-def leaderboardStep(ui: UI): IO[Unit] = {
+def gameResultsStep(ui: UI, completedTrivia: Trivia): IO[Unit] = {
   for {
     _ <- ui.clear
-    _ <- ui.display(mapToLeaderboardViewModel(List.empty, FinalizedPlayer("any", 0)).textItem())
+    _ <- ui.display(mapToTriviaResultsViewModel(completedTrivia).textItem())
     _ <- ui.input
   } yield ()
 }

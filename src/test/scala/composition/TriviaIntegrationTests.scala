@@ -19,20 +19,9 @@ class TriviaIntegrationTests extends AnyFunSuite {
     assert(view.displayedTimes(greetingViewModel.textItem()) == 1)
   }
 
-  test("Displays error on incorrect name input") {
+  test("Displays categories choice on any input") {
     val (view, _, program) = makeSut()
-    view.stub("!@#$%^&*")
-    view.stub("123#!(*")
-
-    program.unsafeRunSync()
-
-    assert(view.displayedTimes(greetingViewModel.textItem()) == 1)
-    assert(view.displayedTimes(nameInputErrorViewModel.textItem()) == 2)
-  }
-
-  test("Displays categories choice on correct name input") {
-    val (view, _, program) = makeSut()
-    view.stub("Vasiliy")
+    view.stub("proceed")
 
     program.unsafeRunSync()
 
@@ -42,7 +31,7 @@ class TriviaIntegrationTests extends AnyFunSuite {
 
   test("Displays categories choice error on incorrect categories input") {
     val (view, _, program) = makeSut()
-    view.stub("Vasiliy")
+    view.stub("proceed")
     view.stub("#@(#*$")
     view.stub("(*&^%$")
 
@@ -54,56 +43,56 @@ class TriviaIntegrationTests extends AnyFunSuite {
 
   test("Displays difficulty choice on correct categories choice") {
     val (view, _, program) = makeSut()
-    view.stub("Vasiliy")
+    view.stub("proceed")
     view.stub("1 3")
 
     program.unsafeRunSync()
 
     assert(view.displayedTimes(allCategoriesViewModel.textItem()) == 0)
-    assert(view.displayedTimes(allDifficultiesViewModel("Vasiliy").textItem()) == 1)
+    assert(view.displayedTimes(allDifficultiesViewModel.textItem()) == 1)
   }
 
   test("Displays difficulty choice error on incorrect difficulty choice") {
     val (view, _, program) = makeSut()
-    view.stub("Vasiliy")
+    view.stub("proceed")
     view.stub("1 3")
     view.stub("!@#$%^&*")
     view.stub("(*&^%$#)")
 
     program.unsafeRunSync()
 
-    assert(view.displayedTimes(allDifficultiesViewModel("Vasiliy").textItem()) == 1)
+    assert(view.displayedTimes(allDifficultiesViewModel.textItem()) == 1)
     assert(view.displayedTimes(difficultyChoiceErrorViewModel.textItem()) == 2)
   }
 
   test("Displays questions loading message on correct difficulty selection") {
     val (view, dataAccess, program) = makeSut()
-    view.stub("Vasiliy")
+    view.stub("proceed")
     view.stub("1 3")
     view.stub("2")
 
     program.unsafeRunSync()
 
-    assert(view.displayedTimes(allDifficultiesViewModel("Vasiliy").textItem()) == 0)
+    assert(view.displayedTimes(allDifficultiesViewModel.textItem()) == 0)
     assert(view.displayedTimes(questionLoadingViewModel.textItem()) == 1)
   }
 
   test("Displays questions loading message once after correct difficulty selection and one fetching retry") {
     val (view, dataAccess, program) = makeSut()
-    view.stub("Vasiliy")
+    view.stub("proceed")
     view.stub("1 3")
     view.stub("2")
     dataAccess.stubQuestions(None)
 
     program.unsafeRunSync()
 
-    assert(view.displayedTimes(allDifficultiesViewModel("Vasiliy").textItem()) == 0)
+    assert(view.displayedTimes(allDifficultiesViewModel.textItem()) == 0)
     assert(view.displayedTimes(questionLoadingViewModel.textItem()) == 1)
   }
 
   test("Retries loading questions and asks the user if he wants to start on successful question loading") {
     val (view, dataAccess, program) = makeSut()
-    view.stub("Vasiliy")
+    view.stub("proceed")
     view.stub("1 3")
     view.stub("2")
     dataAccess.stubQuestions(None)
@@ -148,35 +137,27 @@ class TriviaIntegrationTests extends AnyFunSuite {
   test("Displays end game message when valid answers to all questions are given") {
     val (view, dataAccess, program) = makeSut()
     stubToCompleteTrivia(view, dataAccess)
+    dataAccess.stubTime(0.0)
+    dataAccess.stubTime(0.2)
+    dataAccess.stubTime(0.0)
+    dataAccess.stubTime(1.0)
 
     program.unsafeRunSync()
-
+    
     assert(view.containsInDisplayed("Progress:") == 0)
     assert(view.displayedTimes(mapToQuestionViewModel(secondQuestion).textItem()) == 0)
-    assert(view.containsInDisplayed("Your Score:") == 1)
+    assert(view.containsInDisplayed("Your Score: 46") == 1)
   }
 
-  test("Displays leaderboard after game is over and any input provided by user") {
+  test("Starts a new game after user provides any input after game is over") {
     val (view, dataAccess, program) = makeSut()
     stubToCompleteTrivia(view, dataAccess)
-    view.stub("any")
-    
-    program.unsafeRunSync()
-    
-    assert(view.containsInDisplayed("Your Score:") == 0)
-    assert(view.containsInDisplayed("Trivia Leaderboard") == 1)
-  }
-
-  test("Starts new game after user provides any input on leaderboard step") {
-    val (view, dataAccess, program) = makeSut()
-    stubToCompleteTrivia(view, dataAccess)
-    view.stub("any")
     view.stub("any")
 
     program.unsafeRunSync()
 
-    assert(view.containsInDisplayed("Trivia Leaderboard") == 0)
-    assert(view.displayedTimes(allCategoriesViewModel.textItem()) == 1)
+    assert(view.containsInDisplayed("Your Score") == 0)
+    assert(view.displayedTimes(greetingViewModel.textItem()) == 1)
   }
 
   // MARK: Helpers
@@ -196,9 +177,10 @@ class TriviaIntegrationTests extends AnyFunSuite {
 
   private def dataAccess(stub: DataAccessStub): DataAccess = new DataAccess:
     override def fetchQuestions(url: String): IO[Option[Questions]] = stub.fetchQuestions(url)
+    override def measureTime: IO[Double] = stub.measureTime
 
   private def stubInputsToStartTrivia(view: ViewSpy): Unit = {
-    view.stub("Vasiliy")
+    view.stub("proceed")
     view.stub("1 3")
     view.stub("2")
     view.stub("")
