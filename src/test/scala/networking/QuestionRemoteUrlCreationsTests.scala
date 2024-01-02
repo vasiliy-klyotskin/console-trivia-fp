@@ -8,9 +8,9 @@ class QuestionRemoteUrlCreationsTests extends AnyFunSuite {
   test("Url for difficulty is correct when all categories are selected") {
     val difficulties = List(Difficulty.Easy, Difficulty.Medium, Difficulty.Hard)
     val expectedUrls = List(
-      "https://the-trivia-api.com/v2/questions?limit=10&difficulties=easy",
-      "https://the-trivia-api.com/v2/questions?limit=10&difficulties=medium",
-      "https://the-trivia-api.com/v2/questions?limit=10&difficulties=hard"
+      "https://the-trivia-api.com/v2/questions?limit=20&difficulties=easy",
+      "https://the-trivia-api.com/v2/questions?limit=20&difficulties=medium",
+      "https://the-trivia-api.com/v2/questions?limit=20&difficulties=hard"
     )
 
     assert(difficulties.map(questionsUrl(_, CategoryChoice.All)) == expectedUrls)
@@ -18,7 +18,7 @@ class QuestionRemoteUrlCreationsTests extends AnyFunSuite {
 
   test("Url for difficulty is correct when some categories are selected") {
     val selectedCategories = List(Category.Music, Category.Science)
-    val expectedUrl = "https://the-trivia-api.com/v2/questions?limit=10&difficulties=easy&categories=music,science"
+    val expectedUrl = "https://the-trivia-api.com/v2/questions?limit=20&difficulties=easy&categories=music,science"
     val result = questionsUrl(Difficulty.Easy, CategoryChoice.Specific(selectedCategories))
 
     assert(result == expectedUrl)

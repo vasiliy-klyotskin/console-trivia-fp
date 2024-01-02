@@ -11,7 +11,7 @@ def questionsUrl(difficulty: Difficulty, categoriesChoice: CategoryChoice): Stri
     case All => ""
     case Specific(categories) => "&categories=" + categories.map(remoteCategory).mkString(",")
   }
-  "https://the-trivia-api.com/v2/questions?limit=10" + difficultyQuery + categoriesQuery
+  "https://the-trivia-api.com/v2/questions?limit=20" + difficultyQuery + categoriesQuery
 }
 
 private def remoteCategory(category: Category): String = {
