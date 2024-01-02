@@ -2,10 +2,9 @@
 
 <img width="1166" alt="Screenshot 2024-01-02 at 20 32 07" src="https://github.com/vasiliy-klyotskin/trivia-fp/assets/54911315/c3212e12-2412-4b2a-8c0b-5856619071fa">
 
+## Overview
 
 This repository contains a console-based trivia application written in the functional programming paradigm.
-
-## Overview
 
 The Console Trivia Application is designed to provide an interactive and enjoyable trivia experience in the command line environment. It leverages functional programming principles to achieve a modular and maintainable codebase.
 
